@@ -31,7 +31,7 @@ struct OrbitModule: View {
                         .opacity(selection == .satellite ? 1 : 0)
                 }
                 .overlay {
-                    ItemView(item: .moon)
+                    ItemView(item: .moon, orientation: [0, .pi, 0])
                         .opacity(selection == .moon ? 1 : 0)
                 }
                 .overlay {
