@@ -49,19 +49,6 @@ struct Modules: View {
                 }
             }
         }
-
-        // If someone closes the main window when viewing the solar system,
-        // dismiss the immersive space and reopen the main window. In other
-        // words, treat closing the control panel the same as tapping the
-        // button to exit the solar system.
-        .onChange(of: scenePhase) { _, newPhase in
-            if model.isShowingSolar && newPhase == .background {
-                Task {
-                    await dismissImmersiveSpace()
-                    openWindow(id: "modules")
-                }
-            }
-        }
     }
 }
 
