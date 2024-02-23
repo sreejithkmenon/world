@@ -37,7 +37,7 @@ struct TableOfContents: View {
             .alignmentGuide(.earthGuide) { context in
                 context[VerticalAlignment.top]
             }
-            .padding(.bottom, 50)
+            .padding(.bottom, 40)
 
             HStack(alignment: .top, spacing: 30) {
                 ForEach(Module.allCases) {

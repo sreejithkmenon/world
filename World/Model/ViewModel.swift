@@ -6,7 +6,6 @@ The stored data for the app.
 */
 
 import SwiftUI
-import Observation
 
 /// The data that the app uses to configure its views.
 @Observable

@@ -65,11 +65,11 @@ class EarthEntity: Entity {
         moonConfiguration: SatelliteEntity.Configuration?
     ) async {
         do { // Load assets.
-            earth = try await ModelEntity(
+            earth = try await Entity(
                 named: configuration.isCloudy ? "Earth" : "Globe",
                 in: worldAssetsBundle
             )
-            pole = try await ModelEntity(named: "Pole", in: worldAssetsBundle)
+            pole = try await Entity(named: "Pole", in: worldAssetsBundle)
             moon = await SatelliteEntity(.orbitMoonDefault)
             for configuration in satelliteConfiguration {
                 await satellites.addChild(SatelliteEntity(configuration))

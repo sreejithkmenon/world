@@ -18,7 +18,6 @@ struct TraceComponent: Component {
     var model: ModelEntity?
 
     init(anchor: Entity, width: Float) {
-        TraceSystem.registerSystem()
         self.anchor = anchor
         self.mesh = TraceMesh(width: width)
     }

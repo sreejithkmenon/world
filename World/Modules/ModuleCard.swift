@@ -28,7 +28,7 @@ struct ModuleCard: View {
         }
         .buttonStyle(.borderless)
         .buttonBorderShape(.roundedRectangle(radius: 20))
-        .frame(minWidth: 200, maxWidth: 380)
+        .frame(minWidth: 200, maxWidth: 355)
     }
 }
 

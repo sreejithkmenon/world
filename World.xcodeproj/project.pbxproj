@@ -20,6 +20,7 @@
 		C253D5772947E44200B292CA /* OrbitSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C253D5762947E44200B292CA /* OrbitSettings.swift */; };
 		C255636A291D8A0300398FCE /* Orbit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2556369291D8A0300398FCE /* Orbit.swift */; };
 		C25617D829CCB6040064FD50 /* SolarSystemControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25617D729CCB6040064FD50 /* SolarSystemControls.swift */; };
+		C2568CAC2A61C97200CA2687 /* Starfield.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C2568CAB2A61C97200CA2687 /* Starfield.jpg */; };
 		C25774D629E219FE00A75567 /* DragRotationModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25774D529E219FE00A75567 /* DragRotationModifier.swift */; };
 		C25774D829E2361000A75567 /* TypeTextModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25774D729E2361000A75567 /* TypeTextModifier.swift */; };
 		C25774DB29E23F8D00A75567 /* GlobeModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25774DA29E23F8D00A75567 /* GlobeModule.swift */; };
@@ -68,6 +69,7 @@
 		C253D5762947E44200B292CA /* OrbitSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbitSettings.swift; sourceTree = "<group>"; };
 		C2556369291D8A0300398FCE /* Orbit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Orbit.swift; sourceTree = "<group>"; };
 		C25617D729CCB6040064FD50 /* SolarSystemControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolarSystemControls.swift; sourceTree = "<group>"; };
+		C2568CAB2A61C97200CA2687 /* Starfield.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Starfield.jpg; sourceTree = "<group>"; };
 		C25774D529E219FE00A75567 /* DragRotationModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragRotationModifier.swift; sourceTree = "<group>"; };
 		C25774D729E2361000A75567 /* TypeTextModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeTextModifier.swift; sourceTree = "<group>"; };
 		C25774DA29E23F8D00A75567 /* GlobeModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobeModule.swift; sourceTree = "<group>"; };
@@ -244,6 +246,7 @@
 			isa = PBXGroup;
 			children = (
 				C22D1AF528EB403600CE0F8F /* Assets.xcassets */,
+				C2568CAB2A61C97200CA2687 /* Starfield.jpg */,
 				C20A898E2A37D93C004E8608 /* Sunlight.skybox */,
 			);
 			path = Resources;
@@ -364,6 +367,7 @@
 			files = (
 				C20A898F2A37D93C004E8608 /* Sunlight.skybox in Resources */,
 				C22D1AF928EB403600CE0F8F /* Preview Assets.xcassets in Resources */,
+				C2568CAC2A61C97200CA2687 /* Starfield.jpg in Resources */,
 				C22D1AF628EB403600CE0F8F /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

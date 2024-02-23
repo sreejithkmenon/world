@@ -27,7 +27,7 @@ class SatelliteEntity: Entity {
 
     init(_ configuration: Configuration) async {
         do { // Load assets.
-            satellite = try await ModelEntity(named: configuration.name, in: worldAssetsBundle)
+            satellite = try await Entity(named: configuration.name, in: worldAssetsBundle)
         } catch {
             fatalError("Failed to load a model asset.")
         }
