@@ -631,6 +631,13 @@ def Xform "Root"
                 int ui:nodegraph:node:stackingOrder = 4728
             }
         }
+
+        def RealityKitComponent "Accessibility"
+        {
+            uniform token info:id = "RealityKit.Accessibility"
+            bool isEnabled = 1
+            string label = "Earth model"
+        }
     }
 }
 

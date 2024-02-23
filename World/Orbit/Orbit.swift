@@ -19,5 +19,8 @@ struct Orbit: View {
             moonConfiguration: model.orbitMoon
         )
         .placementGestures(initialPosition: Point3D([475, -1200.0, -1200.0]))
+        .onDisappear {
+            model.isShowingOrbit = false
+        }
     }
 }

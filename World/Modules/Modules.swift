@@ -41,13 +41,10 @@ struct Modules: View {
             if path.isEmpty {
                 if model.isShowingGlobe {
                     dismissWindow(id: Module.globe.name)
-                    model.isShowingGlobe = false
                 }
                 if model.isShowingOrbit || model.isShowingSolar {
                     Task {
                         await dismissImmersiveSpace()
-                        model.isShowingOrbit = false
-                        model.isShowingSolar = false
                     }
                 }
             }
@@ -61,7 +58,6 @@ struct Modules: View {
             if model.isShowingSolar && newPhase == .background {
                 Task {
                     await dismissImmersiveSpace()
-                    model.isShowingSolar = false
                     openWindow(id: "modules")
                 }
             }

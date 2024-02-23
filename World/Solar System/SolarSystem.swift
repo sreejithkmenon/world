@@ -27,5 +27,11 @@ struct SolarSystem: View {
             
             Starfield()
         }
+        .onAppear {
+            model.isShowingSolar = true
+        }
+        .onDisappear {
+            model.isShowingSolar = false
+        }
     }
 }

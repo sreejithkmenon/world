@@ -169,17 +169,24 @@ class EarthEntity: Entity {
             currentSunIntensity = sunIntensity
         }
 
-        // Tilt the axis according the current date. For the tilt to create
-        // a particular date, the sun must be located along the positive x-axis.
-        // However the magnitude of the tilt is accurate in any case.
-        equatorialPlane.updateTransform(
-            rotation: tilt(date: configuration.date),
-            withAnimation: animateUpdates)
+        // Tilt the axis according to a date. For this to be meaningful,
+        // locate the sun along the positive x-axis. Animate this move for
+        // changes that the user makes when the globe appears in the volume.
+        equatorialPlane.move(
+            to: Transform(
+                scale: equatorialPlane.scale,
+                rotation: tilt(date: configuration.date),
+                translation: equatorialPlane.position),
+            relativeTo: self,
+            duration: animateUpdates ? 0.25 : 0)
 
-        self.updateTransform(
-            scale: SIMD3(repeating: configuration.scale),
-            translation: configuration.position,
-            withAnimation: animateUpdates)
+        // Scale and position the entire entity.
+        move(
+            to: Transform(
+                scale: SIMD3(repeating: configuration.scale),
+                rotation: orientation,
+                translation: configuration.position),
+            relativeTo: parent)
     }
 
     /// Calculates the orientation of the Earth's tilt on a specified date.

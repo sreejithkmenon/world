@@ -31,6 +31,13 @@ def Xform "Root"
                 token outputs:realitykit:vertex
             }
         }
+
+        def RealityKitComponent "Accessibility"
+        {
+            uniform token info:id = "RealityKit.Accessibility"
+            bool isEnabled = 1
+            string label = "Telescope model"
+        }
     }
 }
 

@@ -16,8 +16,7 @@ struct Starfield: View {
     var body: some View {
         RealityView { content in
             // Create a material with a star field on it.
-            guard let url = Bundle.main.url(forResource: "Starfield", withExtension: "jpg"),
-                              let resource = try? await TextureResource(contentsOf: url) else {
+            guard let resource = try? await TextureResource(named: "Starfield") else {
                 // If the asset isn't available, something is wrong with the app.
                 fatalError("Unable to load starfield texture.")
             }

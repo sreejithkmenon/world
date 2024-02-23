@@ -23,7 +23,7 @@ public struct SunPositionSystem: System {
     public init(scene: RealityKit.Scene) {}
     
     public func update(context: SceneUpdateContext) {
-        for entity in context.entities(matching: Self.query, when: .rendering) {
+        for entity in context.entities(matching: Self.query, updatingSystemWhen: .rendering) {
             guard let component = entity.sunPositionComponent else {
                 continue
             }

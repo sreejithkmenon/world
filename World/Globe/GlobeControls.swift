@@ -20,6 +20,7 @@ struct GlobeControls: View {
                 .alignmentGuide(.tiltButtonGuide) { context in
                     context[HorizontalAlignment.center]
                 }
+                .accessibilitySortPriority(1)
 
             HStack(spacing: 17) {
                 Toggle(isOn: $model.globeEarth.showSun) {
@@ -49,6 +50,7 @@ struct GlobeControls: View {
             .alignmentGuide(.controlPanelGuide) { context in
                 context[HorizontalAlignment.center]
             }
+            .accessibilitySortPriority(2)
         }
 
         // Update the date that controls the Earth's tilt.
@@ -62,6 +64,7 @@ struct GlobeControls: View {
 private struct GlobeTiltPicker: View {
     @Environment(ViewModel.self) private var model
     @Binding var isVisible: Bool
+    @AccessibilityFocusState var axFocusTiltMenu: Bool
 
     var body: some View {
         Grid(alignment: .leading) {
@@ -69,6 +72,7 @@ private struct GlobeTiltPicker: View {
                 .font(.title)
                 .padding(.top, 5)
                 .gridCellAnchor(.center)
+                .accessibilityFocused($axFocusTiltMenu)
             Divider()
                 .gridCellUnsizedAxes(.horizontal)
             ForEach(GlobeTilt.allCases) { tilt in
@@ -80,9 +84,10 @@ private struct GlobeTiltPicker: View {
                         Text(tilt.name)
                     }
                     .buttonStyle(.borderless)
-
+                    .accessibilityAddTraits(tilt == model.globeTilt ? .isSelected : [])
                     Image(systemName: "checkmark")
                         .opacity(tilt == model.globeTilt ? 1 : 0)
+                        .accessibility(hidden: true)
                 }
             }
         }
@@ -90,6 +95,7 @@ private struct GlobeTiltPicker: View {
         .glassBackgroundEffect(in: .rect(cornerRadius: 20))
         .opacity(isVisible ? 1 : 0)
         .animation(.default.speed(2), value: isVisible)
+        .onChange(of: isVisible) { axFocusTiltMenu = true }
     }
 }
 

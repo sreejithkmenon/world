@@ -40,7 +40,7 @@ private struct SettingsButtonModifier: ViewModifier {
         content
             .ornament(
                 visibility: showDebugSettings ? .visible : .hidden,
-                attachmentAnchor: .scene(alignment: .bottom)
+                attachmentAnchor: .scene(.bottom)
             ) {
                 Button {
                     showSettings = true

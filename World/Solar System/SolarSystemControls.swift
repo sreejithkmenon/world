@@ -9,10 +9,6 @@ import SwiftUI
 
 /// The control panel to display along with the solar system view.
 struct SolarSystemControls: View {
-    @Environment(ViewModel.self) private var model
-    @Environment(\.openWindow) private var openWindow
-    @Environment(\.dismiss) private var dismiss
-
     @State private var factCount = 0
 
     var body: some View {
@@ -59,14 +55,9 @@ struct SolarSystemControls: View {
                 Divider()
                     .padding()
 
-                Button {
-                    // Hides the VR view.
-                    model.isShowingSolar = false
-                } label: {
-                    Label("Exit the Solar System", systemImage: "arrow.down.right.and.arrow.up.left")
-                }
-                .buttonStyle(.borderless)
-                .padding(.bottom)
+                SolarSystemToggle()
+                    .buttonStyle(.borderless)
+                    .padding(.bottom)
             }
             .frame(width: 400)
             .glassBackgroundEffect(in: .rect(cornerRadius: 40))
