@@ -15,6 +15,7 @@ struct Earth: View {
     var satelliteConfiguration: [SatelliteEntity.Configuration] = []
     var moonConfiguration: SatelliteEntity.Configuration? = nil
     var animateUpdates: Bool = false
+    var axCustomActionHandler: ((_: AccessibilityEvents.CustomAction) -> Void)? = nil
 
     /// The Earth entity that the view creates and stores for later updates.
     @State private var earthEntity: EarthEntity?
@@ -25,9 +26,17 @@ struct Earth: View {
             let earthEntity = await EarthEntity(
                 configuration: earthConfiguration,
                 satelliteConfiguration: satelliteConfiguration,
-                moonConfiguration: moonConfiguration
-            )
+                moonConfiguration: moonConfiguration)
             content.add(earthEntity)
+
+            // Handle custom accessibility events.
+            if let axCustomActionHandler {
+                _ = content.subscribe(
+                    to: AccessibilityEvents.CustomAction.self,
+                    on: nil,
+                    componentType: nil,
+                    axCustomActionHandler)
+            }
 
             // Store for later updates.
             self.earthEntity = earthEntity

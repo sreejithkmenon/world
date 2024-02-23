@@ -17,6 +17,7 @@ struct TableOfContents: View {
         VStack {
             Image("SunSliver")
                 .opacity(model.isTitleFinished ? 1 : 0)
+                .accessibility(hidden: true)
 
             Spacer(minLength: 120)
 
@@ -61,6 +62,7 @@ struct TableOfContents: View {
                     context[VerticalAlignment.top] + 100
                 }
                 .opacity(model.isTitleFinished ? 1 : 0)
+                .accessibility(hidden: true)
         }
         .animation(.default.speed(0.25), value: model.isTitleFinished)
     }

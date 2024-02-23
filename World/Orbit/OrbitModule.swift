@@ -47,6 +47,7 @@ struct OrbitModule: View {
                 }
             }
             .pickerStyle(.segmented)
+            .accessibilitySortPriority(0)
             .frame(width: 350)
         }
     }
@@ -68,6 +69,7 @@ private struct ItemView: View {
                 )
                 .frame(depth: modelDepth)
                 .offset(z: -modelDepth / 2)
+                .accessibilitySortPriority(1)
         } placeholder: {
             ProgressView()
                 .offset(z: -modelDepth * 0.75)
@@ -78,6 +80,5 @@ private struct ItemView: View {
 #Preview {
     OrbitModule()
         .padding()
-        .glassBackgroundEffect()
         .environment(ViewModel())
 }

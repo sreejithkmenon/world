@@ -19,5 +19,4 @@ struct GlobeModule: View {
 #Preview {
     GlobeModule()
         .padding()
-        .glassBackgroundEffect()
 }

@@ -14,25 +14,24 @@ class SatelliteEntity: Entity {
     
     // MARK: - Sub-entities
 
-    private let satellite: Entity
+    private var satellite = Entity()
     private let box = Entity()
     private let orbit = Entity()
 
     // MARK: - Initializers
 
     @MainActor required init() {
-        satellite = Entity()
         super.init()
     }
 
     init(_ configuration: Configuration) async {
-        do { // Load assets.
-            satellite = try await Entity(named: configuration.name, in: worldAssetsBundle)
-        } catch {
-            fatalError("Failed to load a model asset.")
-        }
-
         super.init()
+
+        // Load the satellite model.
+        guard let satellite = await WorldAssets.entity(named: configuration.name) else {
+            return
+        }
+        self.satellite = satellite
 
         // An entity whose orientation controls the inclination of the orbit.
         name = configuration.name

@@ -15,7 +15,7 @@ class EarthEntity: Entity {
     // MARK: - Sub-entities
 
     /// The model that draws the Earth's surface features.
-    private let earth: Entity
+    private var earth: Entity = Entity()
 
     /// An entity that rotates 23.5° to create axial tilt.
     private let equatorialPlane = Entity()
@@ -25,10 +25,10 @@ class EarthEntity: Entity {
     private let rotator = Entity()
 
     /// A physical representation of the Earth's north and south poles.
-    private let pole: Entity
+    private var pole: Entity = Entity()
 
     /// The Earth's one natural satellite.
-    private let moon: SatelliteEntity
+    private var moon: SatelliteEntity = SatelliteEntity()
 
     /// A container for artificial satellites.
     private let satellites = Entity()
@@ -42,9 +42,6 @@ class EarthEntity: Entity {
 
     /// Creates a new blank earth entity.
     @MainActor required init() {
-        earth = Entity()
-        pole = Entity()
-        moon = SatelliteEntity()
         super.init()
     }
 
@@ -64,21 +61,18 @@ class EarthEntity: Entity {
         satelliteConfiguration: [SatelliteEntity.Configuration],
         moonConfiguration: SatelliteEntity.Configuration?
     ) async {
-        do { // Load assets.
-            earth = try await Entity(
-                named: configuration.isCloudy ? "Earth" : "Globe",
-                in: worldAssetsBundle
-            )
-            pole = try await Entity(named: "Pole", in: worldAssetsBundle)
-            moon = await SatelliteEntity(.orbitMoonDefault)
-            for configuration in satelliteConfiguration {
-                await satellites.addChild(SatelliteEntity(configuration))
-            }
-        } catch {
-            fatalError("Failed to load a model asset.")
-        }
-
         super.init()
+
+        // Load the earth and pole models.
+        guard let earth = await WorldAssets.entity(named: configuration.isCloudy ? "Earth" : "Globe"),
+              let pole = await WorldAssets.entity(named: "Pole") else { return }
+        self.earth = earth
+        self.pole = pole
+
+        // Create satellites.
+        for configuration in satelliteConfiguration {
+            await satellites.addChild(SatelliteEntity(configuration))
+        }
 
         // Attach to the Earth to a set of entities that enable axial
         // tilt and a configured amount of rotation around the axis.
@@ -92,6 +86,7 @@ class EarthEntity: Entity {
 
         // The Moon's orbit isn't affected by the tilt of the Earth, so attach
         // the Moon to the root entity.
+        moon = await SatelliteEntity(.orbitMoonDefault)
         self.addChild(moon)
 
         // The inclination of artificial satellite orbits is measured relative
@@ -134,16 +129,16 @@ class EarthEntity: Entity {
 
         // Set the speed of the Earth's automatic rotation on it's axis.
         if var rotation: RotationComponent = earth.components[RotationComponent.self] {
-            rotation.speed = configuration.speed
+            rotation.speed = configuration.currentSpeed
             earth.components[RotationComponent.self] = rotation
         } else {
-            earth.components.set(RotationComponent(speed: configuration.speed))
+            earth.components.set(RotationComponent(speed: configuration.currentSpeed))
         }
 
         // Update the Moon.
         moon.update(
             configuration: moonConfiguration ?? .disabledMoon,
-            speed: configuration.speed,
+            speed: configuration.currentSpeed,
             traceAnchor: self)
 
         // Update the artificial satellites.
@@ -151,7 +146,7 @@ class EarthEntity: Entity {
             guard let satelliteConfiguration = satelliteConfiguration.first(where: { $0.name == satellite.name }) else { continue }
             (satellite as? SatelliteEntity)?.update(
                 configuration: satelliteConfiguration,
-                speed: configuration.speed,
+                speed: configuration.currentSpeed,
                 traceAnchor: earth)
         }
 
@@ -163,22 +158,21 @@ class EarthEntity: Entity {
             configuration.poleThickness]
 
         // Set the sunlight, if corresponding controls have changed.
-        let sunIntensity = configuration.showSun ? configuration.sunIntensity : nil
-        if sunIntensity != currentSunIntensity {
-            setSunlight(intensity: configuration.showSun ? configuration.sunIntensity : nil)
-            currentSunIntensity = sunIntensity
+        if configuration.currentSunIntensity != currentSunIntensity {
+            setSunlight(intensity: configuration.currentSunIntensity)
+            currentSunIntensity = configuration.currentSunIntensity
         }
 
         // Tilt the axis according to a date. For this to be meaningful,
         // locate the sun along the positive x-axis. Animate this move for
         // changes that the user makes when the globe appears in the volume.
-        equatorialPlane.move(
-            to: Transform(
-                scale: equatorialPlane.scale,
-                rotation: tilt(date: configuration.date),
-                translation: equatorialPlane.position),
-            relativeTo: self,
-            duration: animateUpdates ? 0.25 : 0)
+        var planeTransform = equatorialPlane.transform
+        planeTransform.rotation = tilt(date: configuration.date)
+        if animateUpdates {
+            equatorialPlane.move(to: planeTransform, relativeTo: self, duration: 0.25)
+        } else {
+            equatorialPlane.move(to: planeTransform, relativeTo: self)
+        }
 
         // Scale and position the entire entity.
         move(
@@ -187,6 +181,62 @@ class EarthEntity: Entity {
                 rotation: orientation,
                 translation: configuration.position),
             relativeTo: parent)
+
+        // Set an accessibility component on the entity.
+        components.set(makeAxComponent(
+            configuration: configuration,
+            satelliteConfiguration: satelliteConfiguration,
+            moonConfiguration: moonConfiguration))
+    }
+
+    /// Create an accessibility component suitable for the Earth entity.
+    ///
+    /// - Parameters:
+    ///   - configuration: Information about how to configure the Earth.
+    ///   - satelliteConfiguration: An array of configuration structures, one
+    ///     for each artificial satellite.
+    ///   - moonConfiguration: A satellite configuration structure that's
+    ///     specifically for the Moon.
+    /// - Returns: A new accessibility component.
+    private func makeAxComponent(
+        configuration: Configuration,
+        satelliteConfiguration: [SatelliteEntity.Configuration],
+        moonConfiguration: SatelliteEntity.Configuration?
+    ) -> AccessibilityComponent {
+        // Create an accessibility component.
+        var axComponent = AccessibilityComponent()
+        axComponent.isAccessibilityElement = true
+
+        // Add a label.
+        axComponent.label = "Earth model"
+
+        // Add a value that describes the model's current state.
+        var axValue = configuration.currentSpeed != 0 ? "Rotating, " : "Not rotating, "
+        axValue.append(configuration.showSun ? "with the sun shining, " : "with the sun not shining, ")
+        if configuration.axDescribeTilt {
+            if let dateString = configuration.date?.formatted(.dateTime.day().month(.wide)) {
+                axValue.append("and tilted for the date \(dateString)")
+            } else {
+                axValue.append("and no tilt")
+            }
+        }
+        if configuration.showPoles {
+            axValue.append("with the poles indicated, ")
+        }
+        for item in satelliteConfiguration.map({ $0.name }) {
+            axValue.append("a \(item) orbits close to the earth, ")
+        }
+        if moonConfiguration != nil {
+            axValue.append("the moon orbits at some distance from the earth.")
+        }
+        axComponent.value = LocalizedStringResource(stringLiteral: axValue)
+
+        // Add custom accessibility actions, if applicable.
+        if !configuration.axActions.isEmpty {
+            axComponent.customActions.append(contentsOf: configuration.axActions)
+        }
+
+        return axComponent
     }
 
     /// Calculates the orientation of the Earth's tilt on a specified date.

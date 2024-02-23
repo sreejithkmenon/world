@@ -19,9 +19,8 @@ struct Sun: View {
 
     var body: some View {
         RealityView { content in
-            guard let sun = try? await Entity(named: "Sun", in: worldAssetsBundle) else {
-                // If the asset isn't available, something is wrong with the app.
-                fatalError("Unable to load Sun model.")
+            guard let sun = await WorldAssets.entity(named: "Sun") else {
+                return
             }
 
             content.add(sun)

@@ -11,11 +11,15 @@ import RealityKit
 extension View {
     /// Listens for gestures and places an item based on those inputs.
     func placementGestures(
-        initialPosition: Point3D = .zero
+        initialPosition: Point3D = .zero,
+        axZoomIn: Bool = false,
+        axZoomOut: Bool = false
     ) -> some View {
         self.modifier(
             PlacementGesturesModifier(
-                initialPosition: initialPosition
+                initialPosition: initialPosition,
+                axZoomIn: axZoomIn,
+                axZoomOut: axZoomOut
             )
         )
     }
@@ -24,6 +28,8 @@ extension View {
 /// A modifier that adds gestures and positioning to a view.
 private struct PlacementGesturesModifier: ViewModifier {
     var initialPosition: Point3D
+    var axZoomIn: Bool
+    var axZoomOut: Bool
 
     @State private var scale: Double = 1
     @State private var startScale: Double? = nil
@@ -41,6 +47,7 @@ private struct PlacementGesturesModifier: ViewModifier {
 
             // Enable people to move the model anywhere in their space.
             .simultaneousGesture(DragGesture(minimumDistance: 0.0, coordinateSpace: .global)
+                .handActivationBehavior(.pinch)
                 .onChanged { value in
                     if let startPosition {
                         let delta = value.location3D - value.startLocation3D
@@ -67,5 +74,13 @@ private struct PlacementGesturesModifier: ViewModifier {
                     startScale = scale
                 }
             )
+            .onChange(of: axZoomIn) {
+                scale = max(0.1, min(3, scale + 0.2))
+                startScale = scale
+            }
+            .onChange(of: axZoomOut) {
+                scale = max(0.1, min(3, scale - 0.2))
+                startScale = scale
+            }
     }
 }

@@ -34,6 +34,5 @@ struct GlobeSettings: View {
 #Preview {
     GlobeSettings()
         .frame(width: 500)
-        .glassBackgroundEffect()
         .environment(ViewModel())
 }

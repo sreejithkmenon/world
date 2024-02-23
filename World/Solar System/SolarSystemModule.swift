@@ -19,5 +19,4 @@ struct SolarSystemModule: View {
 #Preview {
     SolarSystemModule()
         .padding()
-        .glassBackgroundEffect()
 }

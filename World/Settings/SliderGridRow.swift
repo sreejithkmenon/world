@@ -38,5 +38,4 @@ struct SliderGridRow<Value: BinaryFloatingPoint>: View where Value.Stride: Binar
     }
     .frame(width: 400)
     .padding()
-    .glassBackgroundEffect()
 }

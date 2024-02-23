@@ -25,15 +25,18 @@ struct ModuleDetail: View {
                         Text(module.heading)
                             .font(.system(size: 50, weight: .bold))
                             .padding(.bottom, 15)
+                            .accessibilitySortPriority(4)
 
                         Text(module.overview)
                             .padding(.bottom, 30)
+                            .accessibilitySortPriority(3)
 
                         switch module {
                         case .globe:
                             GlobeToggle()
                         case .orbit:
                             OrbitToggle()
+                                .accessibilitySortPriority(2)
                         case .solar:
                             SolarSystemToggle()
                         }
@@ -53,6 +56,7 @@ struct ModuleDetail: View {
                 Image("SolarBackground")
                     .resizable()
                     .scaledToFill()
+                    .accessibility(hidden: true)
             }
         }
 

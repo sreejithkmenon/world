@@ -38,6 +38,5 @@ struct OrbitSettings: View {
 #Preview {
     OrbitSettings()
         .frame(width: 500)
-        .glassBackgroundEffect()
         .environment(ViewModel())
 }

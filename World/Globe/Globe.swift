@@ -11,13 +11,25 @@ import SwiftUI
 struct Globe: View {
     @Environment(ViewModel.self) private var model
 
+    @State var axRotateClockwise: Bool = false
+    @State var axRotateCounterClockwise: Bool = false
+
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .controlPanelGuide, vertical: .bottom)) {
             Earth(
                 earthConfiguration: model.globeEarth,
                 animateUpdates: true
-            )
-            .dragRotation(pitchLimit: .degrees(90))
+            ) { event in
+                if event.key.defaultValue == EarthEntity.AccessibilityActions.rotateCW.name.defaultValue {
+                    axRotateClockwise.toggle()
+                } else if event.key.defaultValue == EarthEntity.AccessibilityActions.rotateCCW.name.defaultValue {
+                    axRotateCounterClockwise.toggle()
+                }
+            }
+            .dragRotation(
+                pitchLimit: .degrees(90),
+                axRotateClockwise: axRotateClockwise,
+                axRotateCounterClockwise: axRotateCounterClockwise)
             .alignmentGuide(.controlPanelGuide) { context in
                 context[HorizontalAlignment.center]
             }

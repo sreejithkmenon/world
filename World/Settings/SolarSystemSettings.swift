@@ -46,6 +46,5 @@ struct SolarSystemSettings: View {
 #Preview {
     SolarSystemSettings()
         .frame(width: 500)
-        .glassBackgroundEffect()
         .environment(ViewModel())
 }

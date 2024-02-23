@@ -20,7 +20,7 @@ struct WorldApp: App {
 
     var body: some Scene {
         // The main window that presents the app's modules.
-        WindowGroup("Hello, world", id: "modules") {
+        WindowGroup("Hello World", id: "modules") {
             Modules()
                 .environment(model)
         }
