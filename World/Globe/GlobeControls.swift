@@ -25,22 +25,18 @@ struct GlobeControls: View {
                 Toggle(isOn: $model.globeEarth.showSun) {
                     Label("Sun", systemImage: "sun.max")
                 }
-                .help("Sun")
 
                 Toggle(isOn: $model.globeEarth.showPoles) {
                     Label("Poles", systemImage: "mappin.and.ellipse")
                 }
-                .help("Poles")
 
                 Toggle(isOn: $model.isGlobeRotating) {
                     Label("Rotate", systemImage: "arrow.triangle.2.circlepath")
                 }
-                .help("Rotate")
 
                 Toggle(isOn: $isTiltPickerVisible) {
                     Label("Tilt", systemImage: "cloud.sun.fill")
                 }
-                .help("Tilt")
                 .alignmentGuide(.tiltButtonGuide) { context in
                     context[HorizontalAlignment.center]
                 }
